@@ -1,6 +1,5 @@
 import { Grammar, Parser } from 'nearley';
 import type { ASTNode, ComparisonExpressionNode } from './ast';
-import { DEBUG_PARSER } from './debug';
 import { evaluate } from './evaluator';
 import {
   createParserError,
@@ -26,14 +25,20 @@ export type ParseFailure = {
 
 export type ParseResult = ParseSuccess | ParseFailure;
 
+type NearleyErrorToken = {
+  type?: string;
+  value: string;
+  offset: number;
+  line: number;
+  col: number;
+};
+
 type NearleyError = Error & {
-  token?: {
-    type?: string;
-    value: string;
-    offset: number;
-    line: number;
-    col: number;
-  };
+  token?: NearleyErrorToken;
+};
+
+type NearleyTokenError = Error & {
+  token: NearleyErrorToken;
 };
 
 class EmptyParseError extends Error {
@@ -51,21 +56,13 @@ export function createNearleyParser(): Parser {
 }
 
 export function parseAst(input: string): ASTNode {
-  const ast = parseInputToAst(input);
-
-  if (DEBUG_PARSER) {
-    console.debug('Parsed AST:', JSON.stringify(ast, null, 2));
-  }
-
-  return ast;
+  return parseInputToAst(input);
 }
 
 export function parse(input: string): ParseResult {
   try {
     const ast = parseInputToAst(input);
     const result = ast.type === 'ComparisonExpression' ? evaluateComparison(ast) : undefined;
-
-    logParseSummary(input, { ok: true, ast });
 
     return {
       ok: true,
@@ -75,8 +72,6 @@ export function parse(input: string): ParseResult {
     };
   } catch (error) {
     const parserError = toParserError(input, error);
-
-    logParseSummary(input, { ok: false, error: parserError });
 
     return {
       ok: false,
@@ -121,8 +116,8 @@ function toParserError(input: string, error: unknown): ParserError {
   }
 
   if (isNearleyError(error)) {
-    if (error.token) {
-      return createSyntaxParserError(input, error);
+    if (hasNearleyToken(error)) {
+      return createSyntaxParserError(error);
     }
 
     return createParserError({
@@ -152,12 +147,8 @@ function createLexerParserError(error: LexerError): ParserError {
   });
 }
 
-function createSyntaxParserError(input: string, error: NearleyError): ParserError {
+function createSyntaxParserError(error: NearleyTokenError): ParserError {
   const token = error.token;
-
-  if (!token) {
-    return unexpectedEndError(input, expectedFromMessage(error.message));
-  }
 
   if (token.type === 'error') {
     return createParserError({
@@ -197,32 +188,10 @@ function isNearleyError(error: unknown): error is NearleyError {
   return error instanceof Error;
 }
 
-function getErrorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : 'Unknown parser error.';
+function hasNearleyToken(error: NearleyError): error is NearleyTokenError {
+  return Boolean(error.token);
 }
 
-function logParseSummary(
-  input: string,
-  result: { ok: true; ast: ASTNode } | { ok: false; error: ParserError }
-): void {
-  if (!DEBUG_PARSER) {
-    return;
-  }
-
-  if (result.ok) {
-    console.debug('Parse summary:', {
-      inputLength: input.length,
-      ok: true,
-      rootType: result.ast.type
-    });
-    return;
-  }
-
-  console.debug('Parse summary:', {
-    inputLength: input.length,
-    ok: false,
-    errorIndex: result.error.index,
-    line: result.error.line,
-    column: result.error.column
-  });
+function getErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : 'Unknown parser error.';
 }

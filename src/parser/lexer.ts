@@ -1,5 +1,4 @@
 import moo from 'moo';
-import { DEBUG_PARSER } from './debug';
 
 export const tokenTypes = [
   'number',
@@ -98,17 +97,11 @@ export function tokenize(input: string): ParserToken[] {
 }
 
 export function dumpTokens(input: string): TokenDumpRow[] {
-  const rows = tokenize(input).map((token) => ({
+  return tokenize(input).map((token) => ({
     type: token.type,
     value: token.value,
     offset: token.offset,
     line: token.line,
     column: token.col
   }));
-
-  if (DEBUG_PARSER) {
-    console.table(rows);
-  }
-
-  return rows;
 }

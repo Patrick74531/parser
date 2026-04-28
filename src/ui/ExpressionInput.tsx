@@ -1,5 +1,4 @@
-import { useEffect, useMemo } from 'react';
-import { DEBUG_PARSER } from '../parser/debug';
+import { useMemo } from 'react';
 import type { ParserError } from '../parser/errors';
 import type { ExampleExpression } from './assignmentExamples';
 import { buildErrorHighlight } from './errorHighlight';
@@ -19,18 +18,6 @@ export function ExpressionInput({ value, error, examples, onChange }: Expression
     examples.find((example) => example.expression === value)?.id ?? customExampleValue;
   const describedBy = error ? 'parser-error-message error-location-preview' : undefined;
   const showLineBadge = value.includes('\n');
-
-  useEffect(() => {
-    if (!import.meta.env.DEV || !DEBUG_PARSER || !highlight) {
-      return;
-    }
-
-    console.debug('Error highlight:', {
-      inputLength: value.length,
-      errorIndex: error?.index,
-      isEndOfInput: highlight.isEndOfInput
-    });
-  }, [error?.index, highlight, value.length]);
 
   function handleExampleChange(exampleId: string): void {
     const selectedExample = examples.find((example) => example.id === exampleId);
