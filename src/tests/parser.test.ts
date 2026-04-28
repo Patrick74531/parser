@@ -48,7 +48,7 @@ describe('parser API', () => {
       ok: false,
       input: '1 + (2 = 3',
       error: {
-        message: 'Unexpected token "="',
+        message: 'Unexpected "=" here',
         index: 7,
         line: 1,
         column: 8

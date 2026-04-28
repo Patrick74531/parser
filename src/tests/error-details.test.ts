@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import type { ParserError } from '../parser/errors';
-import { formatErrorLocation, getErrorGuidance } from '../ui/errorDetails';
+import { formatErrorLocation, formatExpectedInput, getErrorGuidance } from '../ui/errorDetails';
 
 function parserError(overrides: Partial<ParserError>): ParserError {
   return {
@@ -32,5 +32,15 @@ describe('error display details', () => {
     expect(getErrorGuidance(parserError({ message: 'Unsupported character "."' }))).toBe(
       'Decimal numbers are not supported. Use whole numbers only.'
     );
+  });
+
+  it('formats expected parser tokens for end users', () => {
+    expect(formatExpectedInput(parserError({ expected: ['number', 'lparen'] }))).toBe(
+      'a number or "("'
+    );
+  });
+
+  it('omits expected input when the parser did not provide it', () => {
+    expect(formatExpectedInput(parserError({ expected: undefined }))).toBeNull();
   });
 });

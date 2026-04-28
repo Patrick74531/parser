@@ -46,7 +46,7 @@ describe('parser and evaluator integration', () => {
 
   it('reports the invalid assignment example location', () => {
     expectInvalidLocation('1 + (2 = 3', {
-      message: 'Unexpected token "="',
+      message: 'Unexpected "=" here',
       index: 7,
       line: 1,
       column: 8
@@ -63,7 +63,7 @@ describe('parser and evaluator integration', () => {
 
   it('reports useful syntax error location for an operator in the wrong position', () => {
     expectInvalidLocation('1 + * 2', {
-      message: 'Unexpected token "*"',
+      message: 'Unexpected "*" here',
       index: 4,
       line: 1,
       column: 5

@@ -59,7 +59,7 @@ describe('error highlight helper', () => {
     const highlight = buildErrorHighlight(
       '1 23',
       parserError({
-        message: 'Unexpected token "23"',
+        message: 'Unexpected "23" here',
         index: 2,
         line: 1,
         column: 3

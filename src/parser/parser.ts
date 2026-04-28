@@ -164,8 +164,8 @@ function createSyntaxParserError(error: NearleyTokenError): ParserError {
   }
 
   return createParserError({
-    message: `Unexpected token "${token.value}"`,
-    explanation: 'The token does not fit the expected expression syntax at this position.',
+    message: `Unexpected "${token.value}" here`,
+    explanation: 'This symbol appears where the parser expected another part of the expression.',
     location: {
       index: token.offset,
       line: token.line,

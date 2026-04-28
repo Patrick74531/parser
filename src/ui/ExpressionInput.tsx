@@ -18,6 +18,11 @@ export function ExpressionInput({ value, error, examples, onChange }: Expression
     examples.find((example) => example.expression === value)?.id ?? customExampleValue;
   const describedBy = error ? 'parser-error-message error-location-preview' : undefined;
   const showLineBadge = value.includes('\n');
+  const highlightLocationLabel = highlight
+    ? highlight.lineNumber > 1
+      ? `Line ${highlight.lineNumber}, column ${highlight.columnNumber}`
+      : `Column ${highlight.columnNumber}`
+    : '';
 
   function handleExampleChange(exampleId: string): void {
     const selectedExample = examples.find((example) => example.id === exampleId);
@@ -75,15 +80,20 @@ export function ExpressionInput({ value, error, examples, onChange }: Expression
         <div
           id="error-location-preview"
           className={`highlight-preview ${showLineBadge ? '' : 'highlight-preview-single'}`}
-          aria-label="Error location preview"
+          aria-label={`Error location preview, ${highlightLocationLabel}`}
         >
           {showLineBadge ? <span className="line-badge">Line {highlight.lineNumber}</span> : null}
           <code className="highlight-line">
             <span>{highlight.before}</span>
             {highlight.isEndOfInput ? (
-              <span className="error-caret" aria-label="Unexpected end of input" />
+              <span
+                className="error-caret"
+                aria-label={`Unexpected end of input at ${highlightLocationLabel}`}
+              />
             ) : (
-              <span className="error-token">{highlight.marker}</span>
+              <span className="error-token" aria-label={`Invalid input at ${highlightLocationLabel}`}>
+                {highlight.marker}
+              </span>
             )}
             <span>{highlight.after}</span>
           </code>

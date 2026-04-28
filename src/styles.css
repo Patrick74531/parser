@@ -428,6 +428,7 @@ h1 {
   font-size: 0.88rem;
 }
 
+.error-expected,
 .error-guidance {
   display: flex;
   gap: 8px;
@@ -441,6 +442,11 @@ h1 {
   font-size: 0.9rem;
 }
 
+.error-expected {
+  margin-bottom: 8px;
+}
+
+.error-expected-label,
 .error-guidance-label {
   flex: 0 0 auto;
   border-radius: 999px;

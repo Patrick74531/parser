@@ -1,7 +1,34 @@
 import type { ParserError } from '../parser/errors';
 
+const expectedInputLabels: Record<string, string> = {
+  divide: '"/"',
+  eq: '"="',
+  lparen: '"("',
+  minus: '"-"',
+  neq: '"!="',
+  number: 'a number',
+  plus: '"+"',
+  rparen: '")"',
+  times: '"*"'
+};
+
 export function formatErrorLocation(error: ParserError): string {
   return error.line > 1 ? `Line ${error.line}, column ${error.column}` : `Column ${error.column}`;
+}
+
+export function formatExpectedInput(error: ParserError): string | null {
+  if (!error.expected || error.expected.length === 0) {
+    return null;
+  }
+
+  const readableExpected = error.expected.map((expected) => expectedInputLabels[expected] ?? expected);
+  const uniqueExpected = Array.from(new Set(readableExpected));
+
+  if (uniqueExpected.length === 1) {
+    return uniqueExpected[0];
+  }
+
+  return `${uniqueExpected.slice(0, -1).join(', ')} or ${uniqueExpected.at(-1)}`;
 }
 
 export function getErrorGuidance(error: ParserError): string | null {
@@ -26,7 +53,7 @@ export function getErrorGuidance(error: ParserError): string | null {
   }
 
   if (error.expected?.includes('rparen')) {
-    return 'A closing parenthesis should appear before this token.';
+    return 'A closing parenthesis should appear before this symbol.';
   }
 
   return null;
