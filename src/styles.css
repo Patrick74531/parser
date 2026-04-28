@@ -52,6 +52,12 @@ textarea {
   margin-bottom: 18px;
 }
 
+.app-subtitle {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
 .eyebrow {
   margin: 0 0 8px;
   color: var(--accent);
@@ -195,6 +201,10 @@ h1 {
   margin-top: 14px;
 }
 
+.highlight-preview-single {
+  grid-template-columns: 1fr;
+}
+
 .line-badge {
   border: 1px solid #efc4bd;
   border-radius: 6px;
@@ -235,16 +245,18 @@ h1 {
   vertical-align: -0.25em;
 }
 
-.output-grid {
+.demo-grid {
   display: grid;
-  grid-template-areas:
-    "ast result"
-    "ast error";
-  grid-template-columns: minmax(0, 1.65fr) minmax(300px, 0.85fr);
-  grid-template-rows: auto minmax(0, 1fr);
-  gap: 14px;
-  margin-top: 14px;
+  grid-template-columns: minmax(0, 1.35fr) minmax(360px, 0.85fr);
+  gap: 16px;
   align-items: stretch;
+}
+
+.workflow-column {
+  display: flex;
+  min-height: 0;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .output-panel {
@@ -252,29 +264,22 @@ h1 {
 }
 
 .ast-panel {
-  grid-area: ast;
   display: flex;
   min-height: 0;
   flex-direction: column;
 }
 
 .result-panel {
-  grid-area: result;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   min-height: 0;
   border-top: 3px solid var(--gold);
 }
 
 .error-panel {
-  grid-area: error;
+  padding: 18px;
   min-height: 0;
-}
-
-.error-panel-clear {
-  border-color: #cbd8d0;
-  background: rgb(251 253 249 / 0.94);
-}
-
-.error-panel-active {
   border-color: #efc4bd;
   background: rgb(255 250 248 / 0.94);
 }
@@ -387,54 +392,64 @@ h1 {
 }
 
 .error-message {
-  margin-bottom: 8px;
+  margin-bottom: 2px;
   color: var(--danger);
   font-weight: 800;
 }
 
 .error-detail {
-  margin-bottom: 6px;
+  margin-bottom: 10px;
   color: #62423d;
 }
 
-.error-note {
-  margin-bottom: 10px;
+.error-summary {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.error-icon {
+  display: inline-grid;
+  flex: 0 0 26px;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--surface);
+  background: var(--danger);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.error-location-text {
+  margin: 0;
   color: #76524f;
   font-size: 0.88rem;
 }
 
-.error-location {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+.error-guidance {
+  display: flex;
   gap: 8px;
-  margin: 0 0 10px;
-}
-
-.error-location div {
+  align-items: baseline;
+  margin: 0;
   border: 1px solid #efc4bd;
   border-radius: 6px;
-  padding: 8px 9px;
-  background: #fffdfb;
-}
-
-.error-location dt {
-  margin-bottom: 3px;
-  color: #76524f;
-  font-size: 0.76rem;
-  font-weight: 800;
-}
-
-.error-location dd {
-  margin: 0;
-  color: #2c1f1e;
-  font-size: 1.1rem;
-  font-weight: 800;
-}
-
-.expected-tokens {
-  margin-bottom: 0;
+  padding: 8px 10px;
   color: #62423d;
+  background: #fffdfb;
   font-size: 0.9rem;
+}
+
+.error-guidance-label {
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 2px 7px;
+  color: var(--surface);
+  background: var(--danger);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
 }
 
 @media (max-width: 860px) {
@@ -451,11 +466,7 @@ h1 {
     align-items: start;
   }
 
-  .output-grid {
-    grid-template-areas:
-      "result"
-      "ast"
-      "error";
+  .demo-grid {
     grid-template-columns: 1fr;
   }
 
@@ -472,9 +483,6 @@ h1 {
     width: max-content;
   }
 
-  .error-location {
-    grid-template-columns: 1fr;
-  }
 }
 
 @media (min-width: 861px) and (max-height: 820px) {

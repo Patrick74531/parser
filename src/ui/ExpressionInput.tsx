@@ -18,6 +18,7 @@ export function ExpressionInput({ value, error, examples, onChange }: Expression
   const selectedExampleId =
     examples.find((example) => example.expression === value)?.id ?? customExampleValue;
   const describedBy = error ? 'parser-error-message error-location-preview' : undefined;
+  const showLineBadge = value.includes('\n');
 
   useEffect(() => {
     if (!import.meta.env.DEV || !DEBUG_PARSER || !highlight) {
@@ -86,10 +87,10 @@ export function ExpressionInput({ value, error, examples, onChange }: Expression
       {highlight ? (
         <div
           id="error-location-preview"
-          className="highlight-preview"
+          className={`highlight-preview ${showLineBadge ? '' : 'highlight-preview-single'}`}
           aria-label="Error location preview"
         >
-          <span className="line-badge">Line {highlight.lineNumber}</span>
+          {showLineBadge ? <span className="line-badge">Line {highlight.lineNumber}</span> : null}
           <code className="highlight-line">
             <span>{highlight.before}</span>
             {highlight.isEndOfInput ? (

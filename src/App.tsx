@@ -11,6 +11,7 @@ const initialExpression = assignmentExamples[0].expression;
 export default function App() {
   const [expression, setExpression] = useState(initialExpression);
   const parseResult = useMemo(() => parse(expression), [expression]);
+  const parserError = parseResult.ok ? null : parseResult.error;
   const selectedExample = useMemo(
     () => assignmentExamples.find((example) => example.expression === expression),
     [expression]
@@ -22,23 +23,25 @@ export default function App() {
         <header className="app-header">
           <p className="eyebrow">Nearley + Moo</p>
           <h1 id="app-title">Mathematical Equation Parser</h1>
+          <p className="app-subtitle">
+            Supports whole numbers, +, -, *, /, =, !=, parentheses, and optional whitespace.
+          </p>
         </header>
 
-        <ExpressionInput
-          value={expression}
-          error={parseResult.ok ? null : parseResult.error}
-          examples={assignmentExamples}
-          onChange={setExpression}
-        />
-
-        <div className="output-grid">
+        <div className="demo-grid">
+          <div className="workflow-column">
+            <ExpressionInput
+              value={expression}
+              error={parserError}
+              examples={assignmentExamples}
+              onChange={setExpression}
+            />
+            {parserError ? <ErrorDisplay error={parserError} /> : null}
+            {parseResult.ok ? (
+              <ResultPanel expected={selectedExample?.expected} result={parseResult.result} />
+            ) : null}
+          </div>
           <AstViewer ast={parseResult.ok ? parseResult.ast : null} />
-          <ResultPanel
-            expected={selectedExample?.expected}
-            isValid={parseResult.ok}
-            result={parseResult.ok ? parseResult.result : undefined}
-          />
-          <ErrorDisplay error={parseResult.ok ? null : parseResult.error} />
         </div>
       </section>
     </main>

@@ -2,13 +2,12 @@ import type { ExampleOutcome } from './assignmentExamples';
 
 type ResultPanelProps = {
   expected?: ExampleOutcome;
-  isValid: boolean;
   result?: boolean;
 };
 
-export function ResultPanel({ expected, isValid, result }: ResultPanelProps) {
+export function ResultPanel({ expected, result }: ResultPanelProps) {
   const hasBooleanResult = typeof result === 'boolean';
-  const actual = hasBooleanResult ? String(result) : isValid ? 'arithmetic' : 'invalid';
+  const actual = hasBooleanResult ? String(result) : 'arithmetic';
 
   return (
     <section className="panel output-panel result-panel" aria-labelledby="result-title">
@@ -19,10 +18,8 @@ export function ResultPanel({ expected, isValid, result }: ResultPanelProps) {
         <p className={`result-value ${result ? 'result-true' : 'result-false'}`}>
           Result: {String(result)}
         </p>
-      ) : isValid ? (
-        <p className="muted">Valid arithmetic expression.</p>
       ) : (
-        <p className="muted">Cannot evaluate invalid input.</p>
+        <p className="muted">Valid arithmetic expression.</p>
       )}
       {expected ? (
         <dl className="result-comparison" aria-label="Expected and actual result">
