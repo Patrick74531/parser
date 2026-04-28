@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "test": "vitest run",
     "test:watch": "vitest",
-    "grammar:build": "nearleyc src/parser/grammar.ne -o src/parser/grammar.generated.ts"
+    "grammar:build": "node scripts/build-grammar.mjs"
   },
   "dependencies": {
     "moo": "^0.5.2",

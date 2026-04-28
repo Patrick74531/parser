@@ -3,6 +3,11 @@
 // Bypasses TS6133. Allow declared but unused functions.
 // @ts-ignore
 function id(d: any[]): any { return d[0]; }
+declare var number: any;
+
+import { createLexer } from './lexer';
+
+const lexer = createLexer();
 
 interface NearleyToken {
   value: any;
@@ -32,10 +37,9 @@ interface Grammar {
 };
 
 const grammar: Grammar = {
-  Lexer: undefined,
+  Lexer: lexer,
   ParserRules: [
-    {"name": "main$string$1", "symbols": [{"literal":"F"}, {"literal":"O"}, {"literal":"U"}, {"literal":"N"}, {"literal":"D"}, {"literal":"A"}, {"literal":"T"}, {"literal":"I"}, {"literal":"O"}, {"literal":"N"}, {"literal":"_"}, {"literal":"P"}, {"literal":"L"}, {"literal":"A"}, {"literal":"C"}, {"literal":"E"}, {"literal":"H"}, {"literal":"O"}, {"literal":"L"}, {"literal":"D"}, {"literal":"E"}, {"literal":"R"}], "postprocess": (d) => d.join('')},
-    {"name": "main", "symbols": ["main$string$1"]}
+    {"name": "main", "symbols": [(lexer.has("number") ? {type: "number"} : number)], "postprocess": ([token]) => token.value}
   ],
   ParserStart: "main",
 };

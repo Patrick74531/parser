@@ -10,4 +10,10 @@ React, Nearley, and Moo foundation for the mathematical equation parser assignme
 - `npm test` runs the Vitest test suite.
 - `npm run build` type-checks and builds the app.
 
-The parser, lexer, evaluator, and UI are placeholders for Step 1 only. Later steps will add the real grammar, parsing behavior, evaluation, and error-location handling.
+## Grammar Build
+
+The source grammar lives at `src/parser/grammar.ne`.
+
+The generated grammar lives at `src/parser/grammar.generated.ts` and is checked into the project so runtime code can import it directly. Run `npm run grammar:build` after editing `grammar.ne`.
+
+The current grammar is a minimal Nearley/Moo build smoke path. Later steps will add the full arithmetic grammar, AST construction, evaluation, and error-location handling.

@@ -1,5 +1,7 @@
+import { Grammar, Parser } from 'nearley';
 import type { ASTNode } from './ast';
 import { createParserError, type ParserError } from './errors';
+import compiledGrammar from './grammar.generated';
 
 export type ParseSuccess = {
   ok: true;
@@ -15,6 +17,10 @@ export type ParseFailure = {
 };
 
 export type ParseResult = ParseSuccess | ParseFailure;
+
+export function createNearleyParser(): Parser {
+  return new Parser(Grammar.fromCompiled(compiledGrammar));
+}
 
 export function parse(input: string): ParseResult {
   return {
