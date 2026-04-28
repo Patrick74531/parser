@@ -8,15 +8,13 @@ describe('project foundation', () => {
     expect(DEBUG_PARSER).toBe(false);
   });
 
-  it('exposes the placeholder parser result shape', () => {
+  it('exposes the parser result shape', () => {
     const result = parse('1 + 2 = 3');
 
     expect(result).toMatchObject({
-      ok: false,
+      ok: true,
       input: '1 + 2 = 3',
-      error: {
-        message: 'Parser implementation pending'
-      }
+      result: true
     });
   });
 

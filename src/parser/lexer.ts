@@ -45,6 +45,7 @@ export class LexerError extends Error {
   readonly line: number;
   readonly column: number;
   readonly value: string;
+  readonly token: moo.Token;
 
   constructor(token: moo.Token) {
     const value = token.value.at(0) ?? token.value;
@@ -55,6 +56,7 @@ export class LexerError extends Error {
     this.line = token.line;
     this.column = token.col;
     this.value = value;
+    this.token = token;
   }
 }
 
