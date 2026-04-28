@@ -1,6 +1,9 @@
 # Mathematical Equation Parser
 
-React, Nearley, and Moo foundation for the mathematical equation parser assignment.
+React, Nearley, and Moo implementation for the mathematical equation parser assignment.
+
+The app parses arithmetic and comparison expressions, displays the AST, evaluates comparison
+statements, and reports friendly error locations in the demo UI.
 
 ## Commands
 
@@ -16,4 +19,21 @@ The source grammar lives at `src/parser/grammar.ne`.
 
 The generated grammar lives at `src/parser/grammar.generated.ts` and is checked into the project so runtime code can import it directly. Run `npm run grammar:build` after editing `grammar.ne`.
 
-The current grammar is a minimal Nearley/Moo build smoke path. Later steps will add the full arithmetic grammar, AST construction, evaluation, and error-location handling.
+## Supported Syntax
+
+- Integer literals.
+- Arithmetic operators: `+`, `-`, `*`, `/`.
+- Comparison operators: `=`, `!=`.
+- Parentheses for grouping.
+- Whitespace between tokens is optional.
+
+## Examples
+
+- `1 + 2 = 3` evaluates to `true`.
+- `2 * 3 + 4 = 10` evaluates to `true`.
+- `2 * (3 + 4) = 10` evaluates to `false`.
+- `6 = 10 / 2 + 1` evaluates to `true`.
+- `12 + 3 != 4 / 2 + 5` evaluates to `true`.
+- `2 + 3 * 2 = 10` evaluates to `false`.
+- `2 * 3 + 4 != 10` evaluates to `false`.
+- `1 + (2 = 3` is invalid and reports an error location.
